@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    const editFormRef = useRef(null)
+    const editFormRef = useRef(null);
+    const fileInputRef = useRef(null);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [contentType, setContentType] = useState("image");
@@ -78,12 +79,44 @@ const Dashboard = () => {
             setContent(null);
             setContentUrl("");
 
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+
         } catch (error) {
             console.log(error);
 
             alert(
                 error.response?.data?.message ||
                 "Failed to create blog"
+            );
+        }
+    };
+    // handle delete
+    const handleDelete = async (blogId) => {
+        const token = localStorage.getItem("token");
+
+        try {
+            await axios.delete(
+                `${API_URL}/api/blogs/${blogId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            setBlogs((prev) =>
+                prev.filter((blog) => blog._id !== blogId)
+            );
+
+            alert("Blog deleted successfully");
+        } catch (error) {
+            console.log(error);
+
+            alert(
+                error.response?.data?.message ||
+                "Failed to delete blog"
             );
         }
     };
@@ -323,6 +356,7 @@ const Dashboard = () => {
                                     </label>
 
                                     <input
+                                        ref={fileInputRef}
                                         type="file"
                                         accept={
                                             contentType === "video"
