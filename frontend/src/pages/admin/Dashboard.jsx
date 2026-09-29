@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -59,7 +60,7 @@ const Dashboard = () => {
                 }
             }
             const response = await axios.post(
-                "http://localhost:5000/api/blogs",
+                `${API_URL}/api/blogs`,
                 formData,
                 {
                     headers: {
@@ -108,7 +109,7 @@ const Dashboard = () => {
             }
 
             const response = await axios.put(
-                `http://localhost:5000/api/blogs/${editingBlog._id}`,
+                `${API_URL}/api/blogs/${editingBlog._id}`,
                 formData,
                 {
                     headers: {
@@ -155,7 +156,7 @@ const Dashboard = () => {
     const fetchComments = async (blogId) => {
         try {
             const response = await axios.get(
-                `http://localhost:5000/api/blogs/${blogId}/comments`
+                `${API_URL}/api/blogs/${blogId}/comments`
             );
 
             setBlogComments((prev) => ({
@@ -176,7 +177,7 @@ const Dashboard = () => {
 
         try {
             await axios.delete(
-                `http://localhost:5000/api/blogs/comments/${commentId}`,
+                `${API_URL}/api/blogs/comments/${commentId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -206,7 +207,7 @@ const Dashboard = () => {
         const fetchBlogs = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:5000/api/blogs"
+                    `${API_URL}/api/blogs`
                 );
 
                 setBlogs(response.data);

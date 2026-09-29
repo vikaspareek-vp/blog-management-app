@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../api/api";
 
 const BlogDetails = () => {
     const { id } = useParams();
@@ -16,14 +17,14 @@ const BlogDetails = () => {
         const fetchBlog = async () => {
             try {
                 const blogResponse = await axios.get(
-                    `http://localhost:5000/api/blogs/${id}`
+                    `${API_URL}/api/blogs/${id}`
                 );
 
                 setBlog(blogResponse.data);
                 setLikes(blogResponse.data.likes);
 
                 const commentsResponse = await axios.get(
-                    `http://localhost:5000/api/blogs/${id}/comments`
+                    `${API_URL}/api/blogs/${id}/comments`
                 );
 
                 setComments(commentsResponse.data);
@@ -38,7 +39,7 @@ const BlogDetails = () => {
     const handleLike = async () => {
         try {
             const response = await axios.post(
-                `http://localhost:5000/api/blogs/${id}/like`
+                `${API_URL}/api/blogs/${id}/like`
             );
 
             setLikes(response.data.likes);
@@ -56,7 +57,7 @@ const BlogDetails = () => {
 
         try {
             const response = await axios.post(
-                `http://localhost:5000/api/blogs/${id}/comments`,
+                `${API_URL}/api/blogs/${id}/comments`,
                 {
                     name,
                     text
