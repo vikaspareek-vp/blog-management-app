@@ -1,0 +1,28 @@
+name: Deploy backend to Azure
+
+on:
+  push:
+    branches: [main]
+    paths: ["backend/**"]        # change "server" if your folder name is different
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --omit=dev
+        working-directory: backend   # change "server" if your folder name is different
+
+      - name: Deploy
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: blog-api-vikas
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./backend         # change "server" if your folder name is different
